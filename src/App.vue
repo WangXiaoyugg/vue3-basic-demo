@@ -6,21 +6,33 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, reactive, toRefs } from "vue";
+interface DataProps {
+  count: number;
+  double: number;
+  add(): void;
+}
 export default {
   name: "App",
   setup() {
-    const count = ref(0);
-    const double = computed(() => {
-      return count.value * 2;
+    // const count = ref(0);
+    // const double = computed(() => {
+    //   return count.value * 2;
+    // });
+    // const add = () => {
+    //   count.value++;
+    // };
+    const data: DataProps = reactive({
+      count: 0,
+      add: () => {
+        data.count++;
+      },
+      double: computed(() => data.count * 2)
     });
-    const add = () => {
-      count.value++;
-    };
+    const refData = toRefs(data);
+
     return {
-      count,
-      double,
-      add
+      ...refData
     };
   }
 };
