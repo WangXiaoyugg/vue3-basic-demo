@@ -2,63 +2,43 @@
   <img alt="Vue logo" src="./assets/logo.png" />
   <h1>{{ count }}</h1>
   <h1>{{ double }}</h1>
+  <h1>{{ greetings }}</h1>
   <button @click="add">👍+1</button>
-  <ul v-for="(number,index) in numbers" :key="index">
-    <li>{{number}}</li>
-  </ul>
-  <p>{{person.name}}</p>
+  <button @click="updateGreeting">Updated</button>
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  reactive,
-  toRefs,
-  onMounted,
-  onUpdated,
-  onRenderTriggered
-} from "vue";
+import { ref, computed, reactive, toRefs, watch } from "vue";
 interface DataProps {
   count: number;
   double: number;
   add(): void;
-  numbers: number[];
-  person: { name?: string };
 }
 export default {
   name: "App",
   setup() {
-    // const count = ref(0);
-    // const double = computed(() => {
-    //   return count.value * 2;
-    // });
-    // const add = () => {
-    //   count.value++;
-    // };
-    onMounted(() => {
-      console.log("mounted");
-    });
-    onUpdated(() => {
-      console.log("updated");
-    });
-    onRenderTriggered(event => {
-      console.log(event);
-    });
     const data: DataProps = reactive({
       count: 0,
       add: () => {
         data.count++;
       },
-      double: computed(() => data.count * 2),
-      numbers: [1, 2],
-      person: {}
+      double: computed(() => data.count * 2)
     });
-    data.numbers.push(4);
-    data.person.name = "garen";
+    const greetings = ref("");
+    const updateGreeting = () => {
+      greetings.value += "Hello!";
+    };
+    watch([greetings, () => data.count], (newVal, oldVal) => {
+      console.log("value: ", oldVal, newVal);
+      document.title = "updated" + greetings.value + data.count;
+    });
+
     const refData = toRefs(data);
 
     return {
-      ...refData
+      ...refData,
+      updateGreeting,
+      greetings
     };
   }
 };
