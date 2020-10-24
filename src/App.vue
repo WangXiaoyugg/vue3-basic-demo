@@ -3,14 +3,20 @@
   <h1>{{ count }}</h1>
   <h1>{{ double }}</h1>
   <button @click="add">👍+1</button>
+  <ul v-for="(number,index) in numbers" :key="index">
+    <li>{{number}}</li>
+  </ul>
+  <p>{{person.name}}</p>
 </template>
 
 <script lang="ts">
-import { ref, computed, reactive, toRefs } from "vue";
+import { computed, reactive, toRefs } from "vue";
 interface DataProps {
   count: number;
   double: number;
   add(): void;
+  numbers: number[];
+  person: { name?: string };
 }
 export default {
   name: "App",
@@ -27,8 +33,12 @@ export default {
       add: () => {
         data.count++;
       },
-      double: computed(() => data.count * 2)
+      double: computed(() => data.count * 2),
+      numbers: [1, 2],
+      person: {}
     });
+    data.numbers.push(4);
+    data.person.name = "garen";
     const refData = toRefs(data);
 
     return {
