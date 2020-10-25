@@ -4,11 +4,18 @@
   <h1>{{ double }}</h1>
   <h1>{{ greetings }}</h1>
   <h1>x: {{x}} ,y: {{y}}</h1>
+  <hr />
+  <p>{{ error }}</p>
   <Suspense>
     <template #default>
-      <async-show></async-show>
+      <div>
+        <async-show />
+        <dog-show />
+      </div>
     </template>
-    <template #fallback>I'am Loading....</template>
+    <template #fallback>
+      <h1>Loading !...</h1>
+    </template>
   </Suspense>
 
   <hr />
@@ -24,11 +31,12 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, reactive, toRefs, watch } from "vue";
+import { ref, computed, reactive, toRefs, watch, onErrorCaptured } from "vue";
 import useMousePosition from "./hooks/useMousePosition";
 import useURLLoader from "./hooks/useURLLoader";
 import Modal from "./components/Modal.vue";
 import AsyncShow from "./components/AsyncShow.vue";
+import DogShow from "./components/DocShow.vue";
 
 interface DataProps {
   count: number;
@@ -51,9 +59,14 @@ export default {
   name: "App",
   components: {
     Modal,
-    AsyncShow
+    AsyncShow,
+    DogShow
   },
   setup() {
+    const error = ref(null);
+    onErrorCaptured((e: any) => {
+      error.value = e;
+    });
     const data: DataProps = reactive({
       count: 0,
       add: () => {
@@ -102,7 +115,8 @@ export default {
       loaded,
       modalIsOpen,
       openModal,
-      onModalClose
+      onModalClose,
+      error
     };
   }
 };

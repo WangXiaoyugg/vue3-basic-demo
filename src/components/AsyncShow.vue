@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ result }}</h1>
+  <h1 id="result">{{ result }}</h1>
 </template>
 
 <script lang="ts">
