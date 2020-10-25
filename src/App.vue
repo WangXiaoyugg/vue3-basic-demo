@@ -4,6 +4,9 @@
   <h1>{{ double }}</h1>
   <h1>{{ greetings }}</h1>
   <h1>x: {{x}} ,y: {{y}}</h1>
+  <h1 v-if="loading">Loading!...</h1>
+  <img v-if="loaded" :src="result.message" alt />
+  <hr />
   <button @click="add">👍+1</button>
   <button @click="updateGreeting">Updated</button>
 </template>
@@ -19,6 +22,7 @@ import {
   onUnmounted
 } from "vue";
 import useMousePosition from "./hooks/useMousePosition";
+import useURLLoader from "./hooks/useURLLoader";
 interface DataProps {
   count: number;
   double: number;
@@ -38,7 +42,12 @@ export default {
     const updateGreeting = () => {
       greetings.value += "Hello!";
     };
+
     const { x, y } = useMousePosition();
+    const { result, loading, loaded } = useURLLoader(
+      "https://dog.ceo/api/breeds/image/random"
+    );
+    console.log(result);
 
     watch([greetings, () => data.count], (newVal, oldVal) => {
       console.log("value: ", oldVal, newVal);
@@ -52,7 +61,10 @@ export default {
       updateGreeting,
       greetings,
       x,
-      y
+      y,
+      result,
+      loading,
+      loaded
     };
   }
 };
