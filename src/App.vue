@@ -4,6 +4,15 @@
   <h1>{{ double }}</h1>
   <h1>{{ greetings }}</h1>
   <h1>x: {{x}} ,y: {{y}}</h1>
+  <Suspense>
+    <template #default>
+      <async-show></async-show>
+    </template>
+    <template #fallback>I'am Loading....</template>
+  </Suspense>
+
+  <hr />
+
   <h1 v-if="loading">Loading!...</h1>
   <img v-if="loaded" :src="result[0].url" alt style="width: 200px; height: auto;" />
   <hr />
@@ -19,6 +28,8 @@ import { ref, computed, reactive, toRefs, watch } from "vue";
 import useMousePosition from "./hooks/useMousePosition";
 import useURLLoader from "./hooks/useURLLoader";
 import Modal from "./components/Modal.vue";
+import AsyncShow from "./components/AsyncShow.vue";
+
 interface DataProps {
   count: number;
   double: number;
@@ -39,7 +50,8 @@ interface CatResult {
 export default {
   name: "App",
   components: {
-    Modal
+    Modal,
+    AsyncShow
   },
   setup() {
     const data: DataProps = reactive({
