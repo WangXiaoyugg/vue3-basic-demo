@@ -5,7 +5,7 @@
   <h1>{{ greetings }}</h1>
   <h1>x: {{x}} ,y: {{y}}</h1>
   <h1 v-if="loading">Loading!...</h1>
-  <img v-if="loaded" :src="result.message" alt />
+  <img v-if="loaded" :src="result[0].url" alt style="width: 200px; height: auto;" />
   <hr />
   <button @click="add">👍+1</button>
   <button @click="updateGreeting">Updated</button>
@@ -28,6 +28,18 @@ interface DataProps {
   double: number;
   add(): void;
 }
+interface DogResult {
+  message: string;
+  status: string;
+}
+
+interface CatResult {
+  id: string;
+  url: string;
+  width: string;
+  height: string;
+}
+
 export default {
   name: "App",
   setup() {
@@ -44,10 +56,15 @@ export default {
     };
 
     const { x, y } = useMousePosition();
-    const { result, loading, loaded } = useURLLoader(
-      "https://dog.ceo/api/breeds/image/random"
+    const { result, loading, loaded } = useURLLoader<CatResult[]>(
+      // "https://dog.ceo/api/breeds/image/random"
+      "https://api.thecatapi.com/v1/images/search?limit=1"
     );
-    console.log(result);
+    watch(result, () => {
+      if (result.value) {
+        console.log("value", result.value[0]);
+      }
+    });
 
     watch([greetings, () => data.count], (newVal, oldVal) => {
       console.log("value: ", oldVal, newVal);

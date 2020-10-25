@@ -1,10 +1,11 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-function useURLLoader(url: string) {
+
+function useURLLoader<T>(url: string) {
   const loading = ref(true)
   const loaded = ref(false)
-  const result = ref(null)
+  const result = ref<T | null>(null)
   const error = ref(null)
   axios.get(url)
     .then(rawData => {
