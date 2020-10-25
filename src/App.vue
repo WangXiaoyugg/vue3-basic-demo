@@ -7,22 +7,16 @@
   <h1 v-if="loading">Loading!...</h1>
   <img v-if="loaded" :src="result[0].url" alt style="width: 200px; height: auto;" />
   <hr />
+  <modal></modal>
   <button @click="add">👍+1</button>
   <button @click="updateGreeting">Updated</button>
 </template>
 
 <script lang="ts">
-import {
-  ref,
-  computed,
-  reactive,
-  toRefs,
-  watch,
-  onMounted,
-  onUnmounted
-} from "vue";
+import { ref, computed, reactive, toRefs, watch } from "vue";
 import useMousePosition from "./hooks/useMousePosition";
 import useURLLoader from "./hooks/useURLLoader";
+import Modal from "./components/Modal.vue";
 interface DataProps {
   count: number;
   double: number;
@@ -42,6 +36,9 @@ interface CatResult {
 
 export default {
   name: "App",
+  components: {
+    Modal
+  },
   setup() {
     const data: DataProps = reactive({
       count: 0,
